@@ -21,7 +21,14 @@ class QuestionView extends Component {
   componentDidMount() {
     this.getQuestions();
   }
-
+  category_names = {
+    1: 'Science',
+    2: 'Art',
+    3: 'Geography',
+    4: 'History',
+    5: 'Entertainment',
+    6: 'Sports',
+  };
   getQuestions = () => {
     $.ajax({
       url: `http://localhost:5000/questions?page=${this.state.page}`, //TODO: update request URL
@@ -86,13 +93,13 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `http://localhost:5000/questions/searches`, //TODO: update request URL
+      url: `http://localhost:5000/questions/search`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({ searchTerm: searchTerm }),
       xhrFields: {
-        withCredentials: true,
+        withCredentials: false,
       },
       crossDomain: true,
       success: (result) => {
@@ -114,7 +121,7 @@ class QuestionView extends Component {
     if (action === 'DELETE') {
       if (window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
-          url: `/questions/${id}`, //TODO: update request URL
+          url: `http://localhost:5000/questions/${id}`, //TODO: update request URL
           type: 'DELETE',
           success: (result) => {
             this.getQuestions();
@@ -165,7 +172,7 @@ class QuestionView extends Component {
               key={q.id}
               question={q.question}
               answer={q.answer}
-              category={q.category}
+              category={this.category_names[q.category]}
               difficulty={q.difficulty}
               questionAction={this.questionAction(q.id)}
             />

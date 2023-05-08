@@ -13,7 +13,7 @@ class QuizView extends Component {
       quizCategory: null,
       previousQuestions: [],
       showAnswer: false,
-      categories: {},
+      categories: [],
       numCorrect: 0,
       currentQuestion: {},
       guess: '',
@@ -23,7 +23,7 @@ class QuizView extends Component {
 
   componentDidMount() {
     $.ajax({
-      url: `localhost:5000/categories`, //TODO: update request URL
+      url: `http://localhost:5000/categories`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({ categories: result.categories });
@@ -51,7 +51,7 @@ class QuizView extends Component {
     }
 
     $.ajax({
-      url: '/quizzes', //TODO: update request URL
+      url: `http://localhost:5000/quizzes`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -60,7 +60,7 @@ class QuizView extends Component {
         quiz_category: this.state.quizCategory,
       }),
       xhrFields: {
-        withCredentials: true,
+        withCredentials: false,
       },
       crossDomain: true,
       success: (result) => {
@@ -109,17 +109,20 @@ class QuizView extends Component {
           <div className="play-category" onClick={this.selectCategory}>
             ALL
           </div>
-          {Object.keys(this.state.categories).map((id) => {
+          {this.state.categories.map((cate) => {
             return (
               <div
-                key={id}
-                value={id}
+                key={cate.id}
+                value={cate.id}
                 className="play-category"
                 onClick={() =>
-                  this.selectCategory({ type: this.state.categories[id], id })
+                  this.selectCategory({
+                    type: `${cate.type}`,
+                    id: `${cate.id}`,
+                  })
                 }
               >
-                {this.state.categories[id]}
+                {cate.type}
               </div>
             );
           })}

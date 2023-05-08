@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
-import $ from 'jquery';
 import '../stylesheets/FormView.css';
+
+import React, { Component } from 'react';
+
+import $ from 'jquery';
 
 class FormView extends Component {
   constructor(props) {
@@ -9,14 +11,14 @@ class FormView extends Component {
       question: '',
       answer: '',
       difficulty: 1,
-      category: 1,
-      categories: {},
+      category: 'Science',
+      categories: [],
     };
   }
 
   componentDidMount() {
     $.ajax({
-      url: `/categories`, //TODO: update request URL
+      url: `http://localhost:5000/categories`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({ categories: result.categories });
@@ -32,7 +34,7 @@ class FormView extends Component {
   submitQuestion = (event) => {
     event.preventDefault();
     $.ajax({
-      url: '/questions', //TODO: update request URL
+      url: 'http://localhost:5000/questions', //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -43,15 +45,16 @@ class FormView extends Component {
         category: this.state.category,
       }),
       xhrFields: {
-        withCredentials: true,
+        withCredentials: false,
       },
       crossDomain: true,
+      // 'Access-Control-Allow-Credentials': true,
       success: (result) => {
         document.getElementById('add-question-form').reset();
         return;
       },
       error: (error) => {
-        alert('Unable to add question. Please try your request again');
+        console.log('Unable to add question. Please try your request again');
         return;
       },
     });
@@ -63,44 +66,44 @@ class FormView extends Component {
 
   render() {
     return (
-      <div id='add-form'>
+      <div id="add-form">
         <h2>Add a New Trivia Question</h2>
         <form
-          className='form-view'
-          id='add-question-form'
+          className="form-view"
+          id="add-question-form"
           onSubmit={this.submitQuestion}
         >
           <label>
             Question
-            <input type='text' name='question' onChange={this.handleChange} />
+            <input type="text" name="question" onChange={this.handleChange} />
           </label>
           <label>
             Answer
-            <input type='text' name='answer' onChange={this.handleChange} />
+            <input type="text" name="answer" onChange={this.handleChange} />
           </label>
           <label>
             Difficulty
-            <select name='difficulty' onChange={this.handleChange}>
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-              <option value='5'>5</option>
+            <select name="difficulty" onChange={this.handleChange}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
             </select>
           </label>
           <label>
             Category
-            <select name='category' onChange={this.handleChange}>
-              {Object.keys(this.state.categories).map((id) => {
+            <select name="category" onChange={this.handleChange}>
+              {this.state.categories.map((cate) => {
                 return (
-                  <option key={id} value={id}>
-                    {this.state.categories[id]}
+                  <option key={cate.id} value={cate.id}>
+                    {cate.type}
                   </option>
                 );
               })}
             </select>
           </label>
-          <input type='submit' className='button' value='Submit' />
+          <input type="submit" className="button" value="Submit" />
         </form>
       </div>
     );

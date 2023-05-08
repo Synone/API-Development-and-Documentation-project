@@ -15,9 +15,10 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
+        self.database_path = 'postgresql+psycopg2://{}:{}@{}/{}'.format('postgres','0000','localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
-
+        self.new_question = {"question":"How are you today?", "answer":"I am okay", "category":"1","difficulty":1}
+        self.fail_question = {"question":"How are you today?", "answer":"I am okay", "category":2,"difficulty":"kjkj"}
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -33,8 +34,20 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
-
-
+    def test_create_new_question(self):
+        res = self.client().post("/questions", json=self.new_question)
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 201)
+        self.assertEqual(data["success"],True)
+        self.assertTrue(data["created"])
+        self.assertTrue(len(data["questions"]))
+    def test_404_create_can_not_process(self):
+        res = self.client().post("/questions", json=self.fail_question)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"],False)
+        self.assertEqual(data["message"],"One of the entity is not appropriate")
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()
