@@ -30,6 +30,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser. T
 npm start
 ```
 
+### Running Backend server
+
+In order to run the backend, change directory to 'backend' dir, run command: `.\myenv\Scripts\activate` to activate virtual environment.
+In order to start the backend,in the command: `set FLASK_APP=flaskr` and `set FLASK_DEBUG=1`,THEN run command: `python -m flask run`
+The backend will run on : [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
 ### Request Formatting
 
 The frontend should be fairly straightforward and disgestible. You'll primarily work within the `components` folder in order to understand, and if you so choose edit, the endpoints utilized by the components. While working on your backend request handling and response formatting, you can reference the frontend to view how it parses the responses.
@@ -58,6 +64,45 @@ You can optionally update this game play to increase the number of questions or 
 ---
 
 ---
+
+## API Reference
+
+### Running Your Frontend in Dev Mode
+
+The frontend app was built using create-react-app. In order to run the app in development mode use `npm start`. You can change the script in the `package.json` file.
+
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits.
+
+```bash
+npm start
+```
+
+### Running Backend server
+
+The backend uses techs in requirements.txt file, create virtual environment using `python -m venv path/your_env_name` and type in CMD `.\your_env\Scripts\activate` to activate the virtual environtment, install all packages running `pip install -r requirements.txt`
+
+In order to run the backend, change directory to 'backend' dir, run command: `.\myenv\Scripts\activate` to activate virtual environment.
+In order to start the backend,in the command: `set FLASK_APP=flaskr` and `set FLASK_DEBUG=1`,THEN run command: `python -m flask run`
+The backend will run on : [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+### Error Handling
+
+Errors are returned as JSON objects in the following format:
+
+```
+{
+    "success": False,
+    "error": 400,
+    "message": "Bad request"
+}
+```
+
+The API will return three error types when requests fail:
+
+- 400: Bad Request
+- 404: Resource Not Found
+- 422: Not Processable
+- 500: Internal Server Error
 
 ## DO NOT PROCEED: ENDPOINT SPOILERS
 
@@ -310,6 +355,23 @@ You can optionally update this game play to increase the number of questions or 
 - Sends a post request in order to add a new question
 - Request Body:
 
+```javascript
+  {url: 'http://localhost:5000/questions', //TODO: update request URL
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        question: new_question,
+        answer: the_anwser,
+        difficulty: the_difficulty,
+        category: the_category,
+      }),
+      xhrFields: {
+        withCredentials: false,
+      },
+      crossDomain: true}
+```
+
 ```json
 {
   "question": "Heres a new question string",
@@ -320,6 +382,15 @@ You can optionally update this game play to increase the number of questions or 
 ```
 
 - Returns: Does not return any new data
+
+```json
+{
+    "success":True,
+    "created": ques.id,
+    "questions":current_questions,
+    "total_questions": len(selection)
+}
+```
 
 ---
 

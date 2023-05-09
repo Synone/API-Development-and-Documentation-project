@@ -11,7 +11,7 @@ class FormView extends Component {
       question: '',
       answer: '',
       difficulty: 1,
-      category: 'Science',
+      category: '1',
       categories: [],
     };
   }

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import $ from 'jquery';
 
-const questionsPerPlay = 5;
+const questionsPerPlay = 3;
 
 class QuizView extends Component {
   constructor(props) {
@@ -74,7 +74,7 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load question. Please try your request again');
+        console.log('Unable to load question. Please try your request again');
         return;
       },
     });
